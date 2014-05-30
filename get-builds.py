@@ -16,9 +16,10 @@ xmlns = 'http://doc.s3.amazonaws.com/2006-03-01'
 
 last_print_length = 0
 
-def start_reprint():
+def start_reprint(text, end=''):
   global last_print_length
   last_print_length = 0
+  print(text, end=end)
 
 def reprint(text, end=''):
   global last_print_length
@@ -41,14 +42,12 @@ def get_downloaded_builds():
   return downloaded_builds
 
 def get_current_builds():
-  print('Build list at', builds_url)
   current_builds = set()
   done = False
   next_marker = ''
   first_timestamp = None
   last_seen_timestamp = None
-  print('Downloading...', end='')
-  start_reprint()
+  start_reprint('Downloading Android build list...')
   while not done:
     if first_timestamp:
       reprint(percentage(
