@@ -53,8 +53,6 @@ def get_current_builds():
       reprint(percentage(
         (last_seen_timestamp - first_timestamp).total_seconds(),
         (datetime.utcnow() - first_timestamp).total_seconds()))
-    else:
-      reprint('0%')
     sys.stdout.flush()
     xml_data = urllib2.urlopen(builds_url + next_marker)
     tree = ElementTree.parse(xml_data)
