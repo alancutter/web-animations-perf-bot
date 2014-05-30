@@ -14,6 +14,7 @@ build_url = 'http://commondatastorage.googleapis.com/chromium-browser-continuous
 index_url = build_url + '?prefix=Android/'
 date_format = '%Y-%m-%d'
 xmlns = 'http://doc.s3.amazonaws.com/2006-03-01'
+cutoff_date = '2013-06-01'
 
 last_print_length = 0
 
@@ -89,7 +90,7 @@ def download_build(build):
       source = urllib2.urlopen(url)
       destination.write(source.read())
   except:
-    os.remove(filname)
+    os.remove(filename)
     raise
   print('saved as %s' % filename)
 
@@ -103,8 +104,9 @@ def download_builds(builds):
 
 def main():
   downloaded_builds = get_downloaded_builds()
-  current_builds = get_current_builds()
-  missing_builds = current_builds - downloaded_builds
+  missing_builds = [
+    build for build in get_current_builds()
+    if build[1] > cutoff_date and build not in downloaded_builds]
   download_builds(missing_builds)
 
 if __name__ == '__main__':
