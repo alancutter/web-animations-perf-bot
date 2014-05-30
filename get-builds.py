@@ -10,7 +10,8 @@ import urllib2
 import sys
 import xml.etree.ElementTree as ElementTree
 
-builds_url = 'http://commondatastorage.googleapis.com/chromium-browser-continuous/?prefix=Android/'
+build_url = 'http://commondatastorage.googleapis.com/chromium-browser-continuous/'
+index_url = build_url + '?prefix=Android/'
 date_format = '%Y-%m-%d'
 xmlns = 'http://doc.s3.amazonaws.com/2006-03-01'
 
@@ -54,7 +55,7 @@ def get_current_builds():
         (last_seen_timestamp - first_timestamp).total_seconds(),
         (datetime.utcnow() - first_timestamp).total_seconds()))
     sys.stdout.flush()
-    xml_data = urllib2.urlopen(builds_url + next_marker)
+    xml_data = urllib2.urlopen(index_url + next_marker)
     tree = ElementTree.parse(xml_data)
     done = tree.find(tag('IsTruncated')).text != 'true'
     if not done:
@@ -80,7 +81,7 @@ def get_current_builds():
   return current_builds
 
 def download_build(build):
-  url = '%sAndroid/%s/chrome-android.zip' % (builds_url, build[0])
+  url = '%sAndroid/%s/chrome-android.zip' % (build_url, build[0])
   filename = 'android-r%s-%s.zip' % build
   print('Downloading %s...' % url, end='')
   sys.stdout.flush()
