@@ -32,7 +32,7 @@ def tag(tagname):
   return '{%s}%s' % (xmlns, tagname)
 
 def percentage(current, total):
-  return '%s%% ' % int(round(100 * current / total))
+  return '%s%%' % int(round(100 * current / total))
 
 def get_downloaded_builds():
   downloaded_builds = set()
@@ -77,7 +77,6 @@ def get_current_builds():
         first_timestamp = datetime.strptime(date, date_format)
       last_seen_timestamp = datetime.strptime(date, date_format)
   reprint('complete', end='\n')
-  print(current_builds)
   return current_builds
 
 def download_build(build):
@@ -95,7 +94,7 @@ def download_builds(builds):
   count = 0
   for build in sorted(builds, reverse=True):
     count += 1
-    print('(%s)' % percentage(count, len(builds)), end='')
+    print('[%s] ' % percentage(count, len(builds)), end='')
     download_build(build)
 
 def main():
