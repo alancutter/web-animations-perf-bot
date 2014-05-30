@@ -84,9 +84,13 @@ def download_build(build):
   filename = 'android-r%s-%s.zip' % build
   print('Downloading %s...' % url, end='')
   sys.stdout.flush()
-  with open(filename, 'w') as destination:
-    source = urllib2.urlopen(url)
-    destination.write(source.read())
+  try:
+    with open(filename, 'w') as destination:
+      source = urllib2.urlopen(url)
+      destination.write(source.read())
+  except:
+    os.remove(filname)
+    raise
   print('saved as %s' % filename)
 
 def download_builds(builds):
