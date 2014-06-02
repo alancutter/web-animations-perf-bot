@@ -37,7 +37,7 @@ def percentage(current, total):
 
 def get_downloaded_builds():
   downloaded_builds = set()
-  for item in os.listdir('.'):
+  for item in os.listdir('zips'):
     match = re.match(r'android-r(\d+)-(\d+-\d+-\d+)\.zip', item)
     if match:
       downloaded_builds.add((match.group(1), match.group(2)))
@@ -82,7 +82,7 @@ def get_current_builds():
 
 def download_build(build):
   url = '%sAndroid/%s/chrome-android.zip' % (build_url, build[0])
-  filename = 'android-r%s-%s.zip' % build
+  filename = 'zips/android-r%s-%s.zip' % build
   print('Downloading %s...' % url, end='')
   sys.stdout.flush()
   try:
