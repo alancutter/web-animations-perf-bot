@@ -29,6 +29,8 @@ def main():
     for test in test_results:
       if test.startswith(unwanted_test):
         continue
+      if '.' in test:
+        test = test[:test.index('.')]
       print('Uploading results for %s...' % test)
       post_data = urllib.urlencode({
         'revision': revision,
