@@ -1,0 +1,11 @@
+build_url = 'http://commondatastorage.googleapis.com/chromium-browser-continuous/'
+date_re = r'[\d-]{10}'
+datetime_format = '%Y-%m-%dT%H:%M'
+datetime_re = date_re + r'T[\d:]{5}'
+hosted_build_key_re = r'Android/([\da-f]+)/chrome-android\.zip'
+hosted_build_url_template = build_url + 'Android/%s/chrome-android.zip'
+index_url = build_url + '?prefix=Android/'
+seconds_between_polls = 60 * 60
+xmlns = 'http://doc.s3.amazonaws.com/2006-03-01'
+extraction_directory = 'apks'
+extracted_build_file_template = extraction_directory + '/ContentShell-%s-%s.apk'
