@@ -17,19 +17,24 @@ from constants import (
 )
 
 
-def test_build(build):
+def test_build(build, chromium_src):
   build_file = ensure_build_file(build)
   deploy_build(build_file, android_device_id)
-  results_file = run_benchmarks(build)
-  upload_results(results_file)
+  results_file = run_benchmarks(chromium_src, build)
+  upload_results(chromium_src, results_file)
 
 def get_command_line_args():
   now = time.strftime(datetime_format)
   parser = argparse.ArgumentParser()
-  parser.add_argument('--from-datetime', type=str, default='', help='The earliest datetime for pulling Android builds. Defaults to now: %s' % now)
+  parser.add_argument('--from-datetime', type=str, help='The earliest datetime for pulling Android builds. Defaults to now: %s' % now)
+  parser.add_argument('--chromium-src', type=str, help='The path to the Chromium src directory.')
   args = parser.parse_args()
   if not args.from_datetime:
     args.from_datetime = now
+  if not args.chromium_src:
+    print('--chromium-src missing')
+    parser.print_help()
+    sys.exit(1)
   return args
 
 def main():
@@ -38,11 +43,9 @@ def main():
   while True:
     next_poll_time = time.time() + seconds_between_polls
     untested_builds = [build for build in list_daily_builds() if build.datetime > last_tested_datetime]
-    count = 0
-    for build in untested_builds:
-      count += 1
-      print('Testing build %s of %s:\n%s' % (count, len(untested_builds), build))
-      test_build(build)
+    for i, build in enumerate(untested_builds):
+      print('Testing build %s of %s:\n%s' % (i + 1, len(untested_builds), build))
+      test_build(build, chromium_src)
     sleep_seconds = int(next_poll_time - time.time())
     if sleep_seconds > 0:
       print('Sleeping for %s seconds (%s minutes)' % (sleep_seconds, sleep_seconds / 60))
