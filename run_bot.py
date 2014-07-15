@@ -1,5 +1,6 @@
 #! /usr/bin/python
 
+from __future__ import division
 from __future__ import print_function
 
 import argparse
@@ -43,7 +44,7 @@ def main():
       test_build(build)
     sleep_seconds = int(next_poll_time - time.time())
     if sleep_seconds > 0:
-      print('Sleeping for %s seconds' % sleep_seconds)
+      print('Sleeping for %s seconds (%s minutes)' % (sleep_seconds, sleep_seconds / 60))
       time.sleep(sleep_seconds)
 
 if __name__ == '__main__':

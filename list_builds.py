@@ -16,7 +16,7 @@ from constants import (
   date_re,
   datetime_format,
   datetime_re,
-  hosted_android_file_re,
+  hosted_build_key_re,
   index_url,
   xmlns,
 )

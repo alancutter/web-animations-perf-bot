@@ -4,7 +4,7 @@ class Build(object):
     self.commit = commit
 
   def __repr__(self):
-    return 'Build(datetime=%s, commit=%s)' % map(repr, self.tuple())
+    return 'Build(datetime=%s, commit=%s)' % (repr(self.datetime), repr(self.commit))
 
   def tuple(self):
     return (self.datetime, self.commit)
