@@ -25,7 +25,7 @@ from constants import (
 
 
 def download_file(url, destination):
-  print('Downloading %s as %s...' % (url, destination), end='')
+  print('Downloading\n\t%s\nas\n\t%s\n...' % (url, destination), end='')
   sys.stdout.flush()
   try:
     with open(destination, 'w') as writer:
@@ -37,7 +37,7 @@ def download_file(url, destination):
   print('done')
 
 def extract_file(source, inner_path, destination):
-  print('Extracting %s from %s as %s...' % (source, inner_path, destination), end='')
+  print('Extracting\n\t%s\nfrom\n\t%s\nas\n\t%s\n...' % (inner_path, source, destination), end='')
   with zipfile.ZipFile(source, 'r') as archive:
     with open(destination, 'w') as writer:
       writer.write(archive.read(inner_path))
