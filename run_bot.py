@@ -11,6 +11,7 @@ from list_builds import list_daily_builds
 from get_build import ensure_build_file
 
 from constants import (
+  android_device_id,
   datetime_format,
   seconds_between_polls,
 )
@@ -18,9 +19,9 @@ from constants import (
 
 def test_build(build):
   build_file = ensure_build_file(build)
-  deploy_build(build_file)
-  results = run_benchmarks()
-  upload_results(results)
+  deploy_build(build_file, android_device_id)
+  results_file = run_benchmarks(build)
+  upload_results(results_file)
 
 def get_command_line_args():
   now = time.strftime(datetime_format)
