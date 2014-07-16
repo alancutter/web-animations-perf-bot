@@ -19,13 +19,21 @@ from constants import (
 def run_benchmarks(chromium_src, build, device):
   if not os.path.exists(results_directory):
     os.mkdir(results_directory)
-  results_file = results_file_template % build.tuple()
-  command = ['python', run_benchmark_script, '--browser', 'android-content-shell', '--output', os.path.abspath(results_file)]
+  username = subprocess.check_output(['whoami']).strip()
+  results_file = results_file_template % (build.datetime, build.commit, device, username)
+  command = [
+    'python',
+    run_benchmark_script,
+    '--browser=android-content-shell',
+    '--output=' + os.path.abspath(results_file),
+    '--reset-results'
+  ]
   if device:
-    command.extend(['--device', device])
+    command.append('--device=' + device)
   print('Executing:', ' '.join(command))
   print('Using working directory:', chromium_src)
   subprocess.check_call(command, cwd=chromium_src)
+  return results_file
 
 def main():
   args = parse_argsets(argparse.ArgumentParser(), [chromium_src_arg, build_args, device_arg])

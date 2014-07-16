@@ -19,4 +19,4 @@ extracted_build_file_template = extraction_directory + '/ContentShell-%s-%s.apk'
 
 run_benchmark_script = 'third_party/WebKit/PerformanceTests/Animation/PerfWeek/run-big-benchmarks.py'
 results_directory = 'results'
-results_file_template = results_directory + '/result-%s-%s.html'
+results_file_template = results_directory + '/result-%s-%s-%s-%s.html' # % (datetime, commit, device, username)

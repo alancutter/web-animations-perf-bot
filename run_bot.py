@@ -29,7 +29,7 @@ def test_build(chromium_src, build, device):
 def get_command_line_args():
   now = time.strftime(datetime_format)
   parser = argparse.ArgumentParser()
-  parser.add_argument('--seconds-between-polls', type=int, default=default_seconds_between_polls, help='How long to wait between batches of runs inclusive of the time taken to execute the batch.')
+  parser.add_argument('--seconds-between-polls', type=int, default=default_seconds_between_polls, help='How long to wait between batches of runs inclusive of the time taken to execute each batch.')
   parser.add_argument('--from-datetime', type=str, default=now, help='The earliest datetime for pulling Android builds. Defaults to now: %s' % now)
   return parse_argsets(parser, [chromium_src_arg, device_arg])
 

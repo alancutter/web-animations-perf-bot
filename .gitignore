@@ -1,4 +1,4 @@
 *.zip
 *.apk
 *.pyc
-*.html
+result*.html
