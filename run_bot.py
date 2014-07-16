@@ -11,6 +11,7 @@ from build import Build
 from list_builds import list_daily_builds
 from get_build import ensure_build_file
 from deploy_build import deploy_build
+from common_args import parse_argsets, chromium_src_arg
 
 from constants import (
   datetime_format,
@@ -28,17 +29,9 @@ def get_command_line_args():
   now = time.strftime(datetime_format)
   parser = argparse.ArgumentParser()
   parser.add_argument('--seconds-between-polls', type=int, default=default_seconds_between_polls, help='How long to wait between batches of runs inclusive of the time taken to execute the batch.')
-  parser.add_argument('--from-datetime', type=str, help='The earliest datetime for pulling Android builds. Defaults to now: %s' % now)
-  parser.add_argument('--chromium-src', type=str, help='The path to the Chromium src directory.')
+  parser.add_argument('--from-datetime', type=str, default=now, help='The earliest datetime for pulling Android builds. Defaults to now: %s' % now)
   parser.add_argument('--device', type=str, default=None, help='The serial ID of an Android device to run the tests on.')
-  args = parser.parse_args()
-  if not args.from_datetime:
-    args.from_datetime = now
-  if not args.chromium_src:
-    print('--chromium-src missing.')
-    parser.print_help()
-    sys.exit(1)
-  return args
+  return parse_argsets(parser, [chromium_src_arg])
 
 def main():
   args = get_command_line_args()

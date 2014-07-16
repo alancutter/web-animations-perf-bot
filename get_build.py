@@ -10,6 +10,7 @@ import urllib2
 import zipfile
 
 from build import Build
+from common_args import parse_argsets, build_args
 
 from constants import (
   build_url,
@@ -64,18 +65,7 @@ def ensure_build_file(build):
 
 def get_command_line_args():
   parser = argparse.ArgumentParser()
-  parser.add_argument('--datetime', type=str, help='The datetime to associate with the build.')
-  parser.add_argument('--commit', type=str, help='The build commit to download.')
-  args = parser.parse_args()
-  if not re.match(datetime_re, args.datetime):
-    print('--datetime invalid.')
-    parser.print_help()
-    sys.exit(1)
-  if not args.commit:
-    print('--commit missing.')
-    parser.print_help()
-    sys.exit(1)
-  return args
+  return parse_argsets(parser, [build_args])
 
 def main():
   args = get_command_line_args()
