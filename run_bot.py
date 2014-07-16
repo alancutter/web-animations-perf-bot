@@ -22,7 +22,7 @@ from constants import (
 def test_build(chromium_src, build, device):
   build_file = ensure_build_file(build)
   deploy_build(build_file, device)
-  results_file = run_benchmarks(chromium_src, build)
+  results_file = run_benchmarks(chromium_src, build, device)
   upload_results(chromium_src, results_file)
 
 def get_command_line_args():

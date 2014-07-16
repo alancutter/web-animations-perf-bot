@@ -6,6 +6,8 @@ import argparse
 import sys
 import subprocess
 
+from common_args import parse_argsets, device_arg
+
 
 def deploy_build(apk, device_id=None):
   print('Deploying\n\t%s\nto android device %s' % (apk, device_id if device_id else ''))
@@ -14,15 +16,13 @@ def deploy_build(apk, device_id=None):
     command.insert(1, '-s')
     command.insert(2, device_id)
   print('Executing\n\t%s\n...' % ' '.join(command), end='')
-  output = subprocess.check_output(command)
+  subprocess.check_call(command)
   print('done')
-  print(output)
 
 def main():
   parser = argparse.ArgumentParser()
   parser.add_argument('--apk', type=str, help='The path to the build file APK to deploy.')
-  parser.add_argument('--device', type=str, default=None, help='The device serial ID to deploy to.')
-  args = parser.parse_args()
+  args = parse_argsets(parser, [device_arg])
   if not args.apk:
     print('No build file APK specified.')
     parser.print_help()

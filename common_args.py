@@ -1,6 +1,9 @@
 from __future__ import print_function
 
+import re
 import sys
+
+from constants import datetime_re
 
 class ArgSet(object):
   def __init__(self, add_args, validate_args):
@@ -44,4 +47,11 @@ chromium_src_arg = ArgSet(
       fail(parser, '--chromium-src missing.'),
     ),
   ),
+)
+
+device_arg = ArgSet(
+  add_args = lambda parser: (
+    parser.add_argument('--device', type=str, default=None, help='The device serial ID to deploy to.'),
+  ),
+  validate_args = lambda parser, args: (),
 )

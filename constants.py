@@ -16,3 +16,7 @@ archived_build_file_template = archive_directory + '/Android-%s-%s.zip' # % (dat
 archived_build_file_inner_path = 'chrome-android/apks/ContentShell.apk'
 extraction_directory = 'apks'
 extracted_build_file_template = extraction_directory + '/ContentShell-%s-%s.apk' # % (datetime, commit)
+
+run_benchmark_script = 'third_party/WebKit/PerformanceTests/Animation/PerfWeek/run-big-benchmarks.py'
+results_directory = 'results'
+results_file_template = results_directory + '/result-%s-%s.html'

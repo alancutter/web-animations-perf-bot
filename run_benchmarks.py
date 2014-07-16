@@ -3,52 +3,34 @@
 from __future__ import print_function
 
 import argparse
+import os
+import subprocess
+
+from common_args import parse_argsets, chromium_src_arg, build_args, device_arg
+from build import Build
 
 from constants import (
-  android_device_id,
-  datetime_format,
-  seconds_between_polls,
+  run_benchmark_script,
+  results_directory,
+  results_file_template,
 )
 
 
-def run_benchmarks(chromium_src, build):
+def run_benchmarks(chromium_src, build, device):
+  if not os.path.exists(results_directory):
+    os.mkdir(results_directory)
   results_file = results_file_template % build.tuple()
-
-def get_command_line_args():
-  parser = argparse.ArgumentParser()
-  parser.add_argument('--chromium-src', type=str, help='The path to the Chromium src directory.')
-  parser.add_argument('--datetime', type=str, help='The datetime to associate with the build.')
-  parser.add_argument('--commit', type=str, help='The build commit to download.')
-  args = parser.parse_args()
-  if not args.from_datetime:
-    args.from_datetime = now
-  if not args.chromium_src:
-    print('--chromium-src missing.')
-    parser.print_help()
-    sys.exit(1)
-  if not re.match(datetime_re, args.datetime):
-    print('--datetime invalid.')
-    parser.print_help()
-    sys.exit(1)
-  if not args.commit:
-    print('--commit missing.')
-    parser.print_help()
-    sys.exit(1)
-  return args
+  command = ['python', run_benchmark_script, '--browser', 'android-content-shell', '--page-filter', 'css-animations-simultaneous-by-updating-class', '--output', os.path.abspath(results_file)]
+  if device:
+    command.extend(['--device', device])
+  print('Executing:', ' '.join(command))
+  print('Using working directory:', chromium_src)
+  subprocess.check_call(command, cwd=chromium_src)
 
 def main():
-  args = get_command_line_args()
-  last_tested_datetime = args.from_datetime
-  while True:
-    next_poll_time = time.time() + seconds_between_polls
-    untested_builds = [build for build in list_daily_builds() if build.datetime > last_tested_datetime]
-    for i, build in enumerate(untested_builds):
-      print('Testing build %s of %s:\n%s' % (i + 1, len(untested_builds), build))
-      test_build(build, chromium_src)
-    sleep_seconds = int(next_poll_time - time.time())
-    if sleep_seconds > 0:
-      print('Sleeping for %s seconds (%s minutes)' % (sleep_seconds, sleep_seconds / 60))
-      time.sleep(sleep_seconds)
+  args = parse_argsets(argparse.ArgumentParser(), [chromium_src_arg, build_args, device_arg])
+  results_file = run_benchmarks(args.chromium_src, Build(args.datetime, args.commit), args.device)
+  print('Results file:', results_file)
 
 if __name__ == '__main__':
   main()

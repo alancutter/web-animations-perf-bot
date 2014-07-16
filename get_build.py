@@ -63,12 +63,8 @@ def ensure_build_file(build):
     extract_file(archived_build_file, archived_build_file_inner_path, extracted_build_file)
   return extracted_build_file
 
-def get_command_line_args():
-  parser = argparse.ArgumentParser()
-  return parse_argsets(parser, [build_args])
-
 def main():
-  args = get_command_line_args()
+  args = parse_argsets(argparse.ArgumentParser(), [build_args])
   build_file = ensure_build_file(Build(args.datetime, args.commit))
   print('Build file: ', build_file)
 
