@@ -64,15 +64,15 @@ def ensure_build_file(build):
 
 def get_command_line_args():
   parser = argparse.ArgumentParser()
-  parser.add_argument('--commit', type=str, help='The build commit to download.')
   parser.add_argument('--datetime', type=str, help='The datetime to associate with the build.')
+  parser.add_argument('--commit', type=str, help='The build commit to download.')
   args = parser.parse_args()
-  if not args.commit:
-    print('Build commit missing.')
+  if not re.match(datetime_re, args.datetime):
+    print('--datetime invalid.')
     parser.print_help()
     sys.exit(1)
-  if not re.match(datetime_re, args.datetime):
-    print('Invalid datetime.')
+  if not args.commit:
+    print('--commit missing.')
     parser.print_help()
     sys.exit(1)
   return args

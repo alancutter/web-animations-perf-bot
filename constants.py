@@ -1,4 +1,4 @@
-seconds_between_polls = 60 * 60
+default_seconds_between_polls = 60 * 60
 
 datetime_format = '%Y-%m-%dT%H:%M'
 date_re = r'[\d-]{10}'
@@ -16,8 +16,3 @@ archived_build_file_template = archive_directory + '/Android-%s-%s.zip' # % (dat
 archived_build_file_inner_path = 'chrome-android/apks/ContentShell.apk'
 extraction_directory = 'apks'
 extracted_build_file_template = extraction_directory + '/ContentShell-%s-%s.apk' # % (datetime, commit)
-
-# Model: Nexus 7 v2
-# Owner: alancutter
-# Asset: 1106514
-android_device_id = '06d94705'
