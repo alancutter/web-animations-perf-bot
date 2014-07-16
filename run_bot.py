@@ -35,13 +35,15 @@ def get_command_line_args():
 
 def main():
   args = get_command_line_args()
+  default_device = ensure_device(args.device) # Try to get any user interaction out of the way earlier rather than later.
   last_tested_datetime = args.from_datetime
   while True:
     next_poll_time = time.time() + args.seconds_between_polls
     untested_builds = [build for build in list_daily_builds() if build.datetime > last_tested_datetime]
     for i, build in enumerate(untested_builds):
       print('Testing build %s of %s:\n%s' % (i + 1, len(untested_builds), build))
-      test_build(args.chromium_src, build, args.device)
+      default_device = ensure_device(default_device)
+      test_build(args.chromium_src, build, default_device)
     sleep_seconds = int(next_poll_time - time.time())
     if sleep_seconds > 0:
       print('Sleeping for %s seconds (%s minutes)' % (sleep_seconds, sleep_seconds / 60))
