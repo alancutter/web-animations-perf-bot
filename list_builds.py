@@ -63,11 +63,33 @@ def list_daily_builds():
       current_date = date
   return daily_builds
 
+def list_weekly_builds():
+  weekly_builds = []
+  current_week = None
+  for build in list_builds():
+    date = re.match(date_re, build.datetime).group(0)
+    week = date[:8] + str(int(date[-2:]) // 7)
+    if week != current_week:
+      weekly_builds.append(build)
+      current_week = week
+  return weekly_builds
+
 def main():
   parser = argparse.ArgumentParser()
-  parser.add_argument('--daily', action='store_true', help='Show only the first build in each day')
+  parser.add_argument('--daily', action='store_true', help='Show only the first build of each day')
+  parser.add_argument('--weekly', action='store_true', help='Show only the first build of each week')
   args = parser.parse_args()
-  builds = list_daily_builds() if args.daily else list_builds()
+  if args.daily and args.weekly:
+    print('Only one of --daily and --weekly may be specified')
+    sys.exit(1)
+
+  if args.daily:
+    builds = list_daily_builds()
+  elif args.weekly:
+    builds = list_weekly_builds();
+  else:
+    builds = list_builds()
+
   for build in builds:
     print(build)
 

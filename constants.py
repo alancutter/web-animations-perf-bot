@@ -15,8 +15,10 @@ archive_directory = 'zips'
 archived_build_file_template = archive_directory + '/Android-%s-%s.zip' # % (datetime, commit)
 archived_build_file_inner_path = 'chrome-android/apks/ContentShell.apk'
 extraction_directory = 'apks'
-extracted_build_file_template = extraction_directory + '/ContentShell-%s-%s.apk' # % (datetime, commit)
+extracted_build_file_template = extraction_directory + '/ContentShell_%s_%s.apk' # % (datetime, commit)
 
 run_benchmark_script = 'third_party/WebKit/PerformanceTests/Animation/PerfWeek/run-big-benchmarks.py'
 results_directory = 'results'
-results_file_template = results_directory + '/result-%s-%s-%s-%s.html' # % (datetime, commit, device, username)
+results_file_template = results_directory + '/results_%s_%s_%s_%s.html' # % (datetime, commit, device, username)
+
+upload_results_script = 'third_party/WebKit/PerformanceTests/Animation/PerfWeek/upload-results.py'
