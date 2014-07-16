@@ -20,7 +20,7 @@ def run_benchmarks(chromium_src, build, device):
   if not os.path.exists(results_directory):
     os.mkdir(results_directory)
   results_file = results_file_template % build.tuple()
-  command = ['python', run_benchmark_script, '--browser', 'android-content-shell', '--page-filter', 'css-animations-simultaneous-by-updating-class', '--output', os.path.abspath(results_file)]
+  command = ['python', run_benchmark_script, '--browser', 'android-content-shell', '--output', os.path.abspath(results_file)]
   if device:
     command.extend(['--device', device])
   print('Executing:', ' '.join(command))

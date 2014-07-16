@@ -8,10 +8,11 @@ import time
 import sys
 
 from build import Build
-from list_builds import list_daily_builds
-from get_build import ensure_build_file
+from common_args import parse_argsets, chromium_src_arg, device_arg
 from deploy_build import deploy_build
-from common_args import parse_argsets, chromium_src_arg
+from ensure_device import ensure_device
+from get_build import ensure_build_file
+from list_builds import list_daily_builds
 
 from constants import (
   datetime_format,
@@ -30,8 +31,7 @@ def get_command_line_args():
   parser = argparse.ArgumentParser()
   parser.add_argument('--seconds-between-polls', type=int, default=default_seconds_between_polls, help='How long to wait between batches of runs inclusive of the time taken to execute the batch.')
   parser.add_argument('--from-datetime', type=str, default=now, help='The earliest datetime for pulling Android builds. Defaults to now: %s' % now)
-  parser.add_argument('--device', type=str, default=None, help='The serial ID of an Android device to run the tests on.')
-  return parse_argsets(parser, [chromium_src_arg])
+  return parse_argsets(parser, [chromium_src_arg, device_arg])
 
 def main():
   args = get_command_line_args()

@@ -5,11 +5,6 @@ import sys
 
 from constants import datetime_re
 
-class ArgSet(object):
-  def __init__(self, add_args, validate_args):
-    self.add_args = add_args
-    self.validate_args = validate_args
-
 def parse_argsets(parser, argsets):
   for argset in argsets:
     argset.add_args(parser)
@@ -23,35 +18,34 @@ def fail(parser, message):
   parser.print_help()
   sys.exit(1)
 
-build_args = ArgSet(
-  add_args = lambda parser: (
-    parser.add_argument('--datetime', type=str, help='The datetime to associate with the build.'),
-    parser.add_argument('--commit', type=str, help='The build commit to download.'),
-  ),
-  validate_args = lambda parser, args: (
-    () if re.match(datetime_re, args.datetime) else (
-      fail(parser, '--datetime invalid.'),
-    ),
-    () if args.commit else (
-      fail(parser, '--commit missing.'),
-    ),
-  ),
-)
+class build_args(object):
+  @staticmethod
+  def add_args(parser):
+    parser.add_argument('--datetime', type=str, help='The datetime to associate with the build.')
+    parser.add_argument('--commit', type=str, help='The build commit to download.')
 
-chromium_src_arg = ArgSet(
-  add_args = lambda parser: (
-    parser.add_argument('--chromium-src', type=str, help='The path to the Chromium src directory.'),
-  ),
-  validate_args = lambda parser, args: (
-    () if args.chromium_src else (
-      fail(parser, '--chromium-src missing.'),
-    ),
-  ),
-)
+  @staticmethod
+  def validate_args(parser, args):
+    if not re.match(datetime_re, args.datetime):
+      fail(parser, '--datetime invalid.')
+    if not args.commit:
+      fail(parser, '--commit missing.')
 
-device_arg = ArgSet(
-  add_args = lambda parser: (
-    parser.add_argument('--device', type=str, default=None, help='The device serial ID to deploy to.'),
-  ),
-  validate_args = lambda parser, args: (),
-)
+class chromium_src_arg(object):
+  @staticmethod
+  def add_args(parser):
+    parser.add_argument('--chromium-src', type=str, help='The path to the Chromium src directory.')
+
+  @staticmethod
+  def validate_args(parser, args):
+    if not args.chromium_src:
+      fail(parser, '--chromium-src missing.')
+
+class device_arg(object):
+  @staticmethod
+  def add_args(parser):
+    parser.add_argument('--device', type=str, default=None, help='The device serial ID to deploy to.')
+
+  @staticmethod
+  def validate_args(parser, args):
+    pass
