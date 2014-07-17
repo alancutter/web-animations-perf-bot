@@ -36,7 +36,7 @@ def run_benchmarks(chromium_src, build, device):
   return results_file
 
 def main():
-  args = parse_argsets(argparse.ArgumentParser(), [chromium_src_arg, build_args, device_arg])
+  args = parse_argsets([chromium_src_arg, build_args, device_arg])
   results_file = run_benchmarks(args.chromium_src, Build(args.datetime, args.commit), args.device)
   print('Results file:', results_file)
 

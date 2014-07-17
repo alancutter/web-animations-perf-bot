@@ -30,7 +30,7 @@ def ensure_device(preferred_device):
       subprocess.check_call(['adb', 'wait-for-devices'])
 
 def main():
-  args = parse_argsets(argparse.ArgumentParser(), [device_arg])
+  args = parse_argsets([device_arg])
   print('Device:', ensure_device(args.device))
 
 if __name__ == '__main__':

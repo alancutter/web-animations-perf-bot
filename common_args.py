@@ -1,11 +1,14 @@
 from __future__ import print_function
 
+import argparse
 import re
 import sys
 
 from constants import datetime_re
 
-def parse_argsets(parser, argsets):
+def parse_argsets(argsets, parser=None):
+  if not parser:
+    parser = argparse.ArgumentParser()
   for argset in argsets:
     argset.add_args(parser)
   args = parser.parse_args()
@@ -49,3 +52,13 @@ class device_arg(object):
   @staticmethod
   def validate_args(parser, args):
     pass
+
+class step_arg(object):
+  @staticmethod
+  def add_args(parser):
+    parser.add_argument('--step', type=str, default='daily', help='The amount to step with each build, must be one of [every|daily|weekly]. Defaults to daily.')
+
+  @staticmethod
+  def validate_args(parser, args):
+    if args.step not in ['every', 'daily', 'weekly']:
+      fail(parser, '--step invalid.')

@@ -10,6 +10,7 @@ import sys
 import xml.etree.ElementTree as ElementTree
 
 from build import Build
+from common_args import parse_argsets, step_arg
 
 from constants import (
   build_url,
@@ -25,7 +26,7 @@ from constants import (
 def tag(tagname):
   return '{%s}%s' % (xmlns, tagname)
 
-def list_builds():
+def list_every_build():
   builds = []
   done = False
   next_marker = ''
@@ -56,7 +57,7 @@ def list_builds():
 def list_daily_builds():
   daily_builds = []
   current_date = None
-  for build in list_builds():
+  for build in list_every_build():
     date = re.match(date_re, build.datetime).group(0)
     if date != current_date:
       daily_builds.append(build)
@@ -66,7 +67,7 @@ def list_daily_builds():
 def list_weekly_builds():
   weekly_builds = []
   current_week = None
-  for build in list_builds():
+  for build in list_every_build():
     date = re.match(date_re, build.datetime).group(0)
     week = date[:8] + str(int(date[-2:]) // 7)
     if week != current_week:
@@ -74,23 +75,18 @@ def list_weekly_builds():
       current_week = week
   return weekly_builds
 
+def list_builds(step):
+  if step == 'every':
+    return list_every_build()
+  if step == 'daily':
+    return list_daily_builds()
+  if step == 'weekly':
+    return list_weekly_builds()
+  assert False, 'invalid step value'
+
 def main():
-  parser = argparse.ArgumentParser()
-  parser.add_argument('--daily', action='store_true', help='Show only the first build of each day')
-  parser.add_argument('--weekly', action='store_true', help='Show only the first build of each week')
-  args = parser.parse_args()
-  if args.daily and args.weekly:
-    print('Only one of --daily and --weekly may be specified')
-    sys.exit(1)
-
-  if args.daily:
-    builds = list_daily_builds()
-  elif args.weekly:
-    builds = list_weekly_builds();
-  else:
-    builds = list_builds()
-
-  for build in builds:
+  args = parse_argsets([step_arg])
+  for build in list_builds(args.step):
     print(build)
 
 if __name__ == '__main__':
