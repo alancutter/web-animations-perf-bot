@@ -29,7 +29,7 @@ class build_args(object):
 
   @staticmethod
   def validate_args(parser, args):
-    if not re.match(datetime_re, args.datetime):
+    if not (args.datetime and re.match(datetime_re, args.datetime)):
       fail(parser, '--datetime invalid.')
     if not args.commit:
       fail(parser, '--commit missing.')

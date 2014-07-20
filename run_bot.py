@@ -14,7 +14,7 @@ from common_args import parse_argsets, chromium_src_arg, device_arg, step_arg
 from deploy_build import deploy_build
 from ensure_device import ensure_device
 from get_build import ensure_build_file
-from list_builds import list_weekly_builds
+from list_builds import list_builds
 from run_benchmarks import run_benchmarks
 
 from constants import (
@@ -56,11 +56,12 @@ def main():
   last_tested_datetime = args.from_datetime
   while True:
     next_poll_time = time.time() + args.seconds_between_polls
-    untested_builds = [build for build in list_weekly_builds() if build.datetime > last_tested_datetime]
+    untested_builds = [build for build in list_builds(args.step) if build.datetime > last_tested_datetime]
     for i, build in enumerate(untested_builds):
       print('Testing build %s of %s:\n%s' % (i + 1, len(untested_builds), build))
       default_device = ensure_device(default_device)
       test_build(args.chromium_src, build, default_device)
+      last_tested_datetime = build.datetime
     sleep_seconds = int(next_poll_time - time.time())
     if sleep_seconds > 0:
       print('Sleeping for %s seconds (%s minutes)' % (sleep_seconds, sleep_seconds // 60))

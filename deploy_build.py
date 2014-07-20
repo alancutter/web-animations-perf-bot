@@ -22,7 +22,7 @@ def deploy_build(apk, device_id=None):
 def main():
   parser = argparse.ArgumentParser()
   parser.add_argument('--apk', type=str, help='The path to the build file APK to deploy.')
-  args = parse_argsets(parser, [device_arg])
+  args = parse_argsets([device_arg], parser)
   if not args.apk:
     print('No build file APK specified.')
     parser.print_help()
