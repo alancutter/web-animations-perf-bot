@@ -35,4 +35,8 @@ run_benchmark_script = 'third_party/WebKit/PerformanceTests/Animation/PerfWeek/r
 results_directory = 'results'
 results_file_template = results_directory + '/results_%s_%s_%s_%s.html' # % (datetime, commit, device, username)
 
-upload_results_script = 'third_party/WebKit/PerformanceTests/Animation/PerfWeek/upload-results.py'
+spreadsheet_url = 'https://script.google.com/macros/s/AKfycbz16KoKbDyWVa9tFOTW09MYv7lSy8h3icmHKanO7FEmPgnz4TU/exec'
+unwanted_test = 'telemetry_page_measurement_results.num_'
+wanted_smoothness_tests = ['avg_surface_fps.', 'mean_frame_time.', 'jank_count.', 'max_frame_delay.']
+results_filename_re = r'results_([\d-]{10})T\d\d:\d\d_([\da-f]+)_([\d\w]+)_(\w+)\.html'
+upload_datetime_format = '%Y-%m-%d %H:%M:%S'

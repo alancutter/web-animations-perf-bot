@@ -30,6 +30,7 @@ from ensure_device import ensure_device
 from get_build import ensure_build_file
 from list_builds import list_builds
 from run_benchmarks import run_benchmarks
+from upload_results import upload_results
 
 from constants import (
   datetime_format,
@@ -37,15 +38,6 @@ from constants import (
   upload_results_script,
 )
 
-
-def upload_results(chromium_src, results_file):
-  command = [
-    'python',
-    os.path.join(chromium_src, upload_results_script),
-    results_file,
-  ]
-  print('Executing', ' '.join(command))
-  subprocess.check_call(command)
 
 def test_build(chromium_src, build, device):
   build_file = ensure_build_file(build)
