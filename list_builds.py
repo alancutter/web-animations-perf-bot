@@ -21,6 +21,7 @@ import argparse
 import re
 import urllib2
 import sys
+import time
 import xml.etree.ElementTree as ElementTree
 
 from build import Build
@@ -89,18 +90,25 @@ def list_weekly_builds():
       current_week = week
   return weekly_builds
 
-def list_builds(step):
+def list_builds(step='every', from_datetime=''):
   if step == 'every':
-    return list_every_build()
-  if step == 'daily':
-    return list_daily_builds()
-  if step == 'weekly':
-    return list_weekly_builds()
-  assert False, 'invalid step value'
+    builds = list_every_build()
+  elif step == 'daily':
+    builds = list_daily_builds()
+  elif step == 'weekly':
+    builds = list_weekly_builds()
+  else:
+    assert False, 'invalid step value'
+  return [build for build in builds if build.datetime >= from_datetime]
 
 def main():
-  args = parse_argsets([step_arg])
-  for build in list_builds(args.step):
+  parser = argparse.ArgumentParser()
+  parser.add_argument('--from-datetime', type=str, default='', help='The earliest datetime for listing Android builds. Defaults to the beginning of time. Use "latest" to list only the latest build.')
+  args = parse_argsets([step_arg], parser)
+  if args.from_datetime == 'latest':
+    print(list_builds(args.step)[-1])
+    return
+  for build in list_builds(args.step, args.from_datetime):
     print(build)
 
 if __name__ == '__main__':

@@ -1,3 +1,5 @@
+#! /usr/bin/python
+
 # Copyright 2014 Google Inc. All Rights Reserved.
 #
 # Licensed under the Apache License, Version 2.0 (the "License");
@@ -12,13 +14,17 @@
 # See the License for the specific language governing permissions and
 # limitations under the License.
 
-class Build(object):
-  def __init__(self, datetime, commit):
-    self.datetime = datetime
-    self.commit = commit
+from __future__ import print_function
 
-  def __repr__(self):
-    return '--datetime=%s --commit=%s' % (repr(self.datetime), repr(self.commit))
+from list_builds import list_builds
+from get_build import ensure_build_file
+from deploy_build import deploy_build
 
-  def tuple(self):
-    return (self.datetime, self.commit)
+def main():
+  build = list_builds('every')[-1]
+  build_file = ensure_build_file(build)
+  deploy_build(build_file)
+  print('Deployed build:', build)
+
+if __name__ == '__main__':
+  main()
