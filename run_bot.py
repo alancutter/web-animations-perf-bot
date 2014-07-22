@@ -45,7 +45,7 @@ def test_build(chromium_src, build, device):
   print('Deployed the build!')
   results_file = run_benchmarks(chromium_src, build, device)
   print('Got the results!')
-  upload_results(chromium_src, results_file)
+  upload_results(results_file)
   print('Uploaded the results!')
 
 def get_command_line_args():
