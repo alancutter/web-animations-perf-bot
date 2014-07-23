@@ -67,6 +67,7 @@ def main():
       default_device = ensure_device(default_device)
       test_build(args.chromium_src, build, default_device)
       last_tested_datetime = build.datetime
+      print('[%s] ' % time.strftime(datetime_format), end='')
     sleep_seconds = int(next_poll_time - time.time())
     if sleep_seconds > 0:
       print('Sleeping for %s seconds (%s minutes)' % (sleep_seconds, sleep_seconds // 60))
