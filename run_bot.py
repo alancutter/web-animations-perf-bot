@@ -61,7 +61,7 @@ def main():
   last_tested_datetime = args.from_datetime
   while True:
     next_poll_time = time.time() + args.seconds_between_polls
-    untested_builds = list_builds(args.step, last_tested_datetime)
+    untested_builds = list_builds(args.chromium_src, args.step, last_tested_datetime)
     for i, build in enumerate(untested_builds):
       print('Testing build %s of %s:\n%s' % (i + 1, len(untested_builds), build))
       default_device = ensure_device(default_device)
