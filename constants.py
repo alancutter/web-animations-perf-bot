@@ -12,6 +12,9 @@
 # See the License for the specific language governing permissions and
 # limitations under the License.
 
+import os
+
+
 default_seconds_between_polls = 60 * 60
 
 datetime_format = '%Y-%m-%dT%H:%M'
@@ -24,6 +27,10 @@ index_url = build_url + '?prefix=Android/'
 hosted_build_url_template = build_url + 'Android/%s/chrome-android.zip' # % commit
 hosted_build_key_re = 'Android/(%s)/chrome-android\.zip' % commit_re
 xmlns = 'http://doc.s3.amazonaws.com/2006-03-01'
+list_cache_directory = 'list_cache'
+commit_datetimes_path = os.path.join(list_cache_directory, 'commit_datetimes')
+git_svn_tag = r'git-svn-id: svn://svn\.chromium\.org/chrome/trunk/src@%s'
+
 
 archive_directory = 'zips'
 archived_build_file_template = archive_directory + '/Android-%s-%s.zip' # % (datetime, commit)
