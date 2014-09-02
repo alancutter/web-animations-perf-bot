@@ -36,7 +36,7 @@ from constants import (
   date_re,
   datetime_format,
   datetime_re,
-  git_svn_tag,
+  commit_position_tag,
   hosted_build_key_re,
   index_url,
   list_cache_directory,
@@ -68,15 +68,10 @@ def datetime_for_commit(cached_commit_datetimes, chromium_src, commit):
 
   # Read from git logs.
   command = ['git', 'log', '-1', '--format=%ct']
-  if len(commit) < 10 and commit.isdigit(): # svn revision
-    svn_revision = int(commit)
-    while True:
-      # FIXME: Make "git svn find-rev" work on the target machine.
-      # git_commit = subprocess.check_output(['git', 'svn', 'find-rev', 'r' + str(svn_revision)], cwd=chromium_src).strip()
-      git_commit = subprocess.check_output(['git', 'log', '-1', '--format=%H', '--grep=' + (git_svn_tag % svn_revision), 'origin/master'], cwd=chromium_src).strip()
-      if git_commit:
-        break
-      svn_revision -= 1
+  if len(commit) < 10 and commit.isdigit(): # commit position
+    commit_position = int(commit)
+    git_commit = subprocess.check_output(['git', 'log', '-1', '--format=%H', '--grep=' + (commit_position_tag % commit_position), 'origin/master'], cwd=chromium_src).strip()
+    assert git_commit, 'Commit must exist at position %s' % commit_position
     command.append(git_commit)
   else: # git revision
     assert commit

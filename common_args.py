@@ -70,7 +70,7 @@ class device_arg(object):
 class step_arg(object):
   @staticmethod
   def add_args(parser):
-    parser.add_argument('--step', type=str, default='daily', help='The amount to step with each build, must be one of [every|daily|weekly]. Defaults to daily.')
+    parser.add_argument('--step', type=str, default='every', help='The amount to step with each build, must be one of [every|daily|weekly]. Defaults to every.')
 
   @staticmethod
   def validate_args(parser, args):

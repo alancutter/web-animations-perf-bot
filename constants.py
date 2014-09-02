@@ -29,7 +29,7 @@ hosted_build_key_re = 'Android/(%s)/chrome-android\.zip' % commit_re
 xmlns = 'http://doc.s3.amazonaws.com/2006-03-01'
 list_cache_directory = 'list_cache'
 commit_datetimes_path = os.path.join(list_cache_directory, 'commit_datetimes')
-git_svn_tag = r'git-svn-id: svn://svn\.chromium\.org/chrome/trunk/src@%s'
+commit_position_tag = 'Cr-Commit-Position: refs/heads/master@{#%s}'
 
 
 archive_directory = 'zips'
