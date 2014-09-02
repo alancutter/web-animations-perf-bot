@@ -76,3 +76,12 @@ class step_arg(object):
   def validate_args(parser, args):
     if args.step not in ['every', 'daily', 'weekly']:
       fail(parser, '--step invalid.')
+
+class page_filter_arg(object):
+  @staticmethod
+  def add_args(parser):
+    parser.add_argument('--page-filter', type=str, default=None, help='Optional page filter to pass to run-big-benchmarks')
+
+  @staticmethod
+  def validate_args(parser, args):
+    pass

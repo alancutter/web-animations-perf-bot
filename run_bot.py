@@ -24,7 +24,13 @@ import sys
 import time
 
 from build import Build
-from common_args import parse_argsets, chromium_src_arg, device_arg, step_arg
+from common_args import (
+  chromium_src_arg,
+  device_arg,
+  page_filter_arg,
+  parse_argsets,
+  step_arg,
+)
 from deploy_build import deploy_build
 from ensure_device import ensure_device
 from get_build import ensure_build_file
@@ -38,12 +44,12 @@ from constants import (
 )
 
 
-def test_build(chromium_src, build, device):
+def test_build(chromium_src, build, device, page_filter):
   build_file = ensure_build_file(build)
   print('Got the build file!')
   deploy_build(build_file, device)
   print('Deployed the build!')
-  results_file = run_benchmarks(chromium_src, build, device)
+  results_file = run_benchmarks(chromium_src, build, device, page_filter)
   print('Got the results!')
   upload_results(results_file)
   print('Uploaded the results!')
@@ -53,7 +59,7 @@ def get_command_line_args():
   parser = argparse.ArgumentParser()
   parser.add_argument('--seconds-between-polls', type=int, default=default_seconds_between_polls, help='How long to wait between batches of runs inclusive of the time taken to execute each batch.')
   parser.add_argument('--from-datetime', type=str, default=now, help='The earliest datetime for pulling Android builds. Defaults to now: %s' % now)
-  return parse_argsets([chromium_src_arg, device_arg, step_arg], parser)
+  return parse_argsets([chromium_src_arg, device_arg, page_filter_arg, step_arg], parser)
 
 def main():
   args = get_command_line_args()
@@ -65,7 +71,7 @@ def main():
     for i, build in enumerate(untested_builds):
       print('Testing build %s of %s:\n%s' % (i + 1, len(untested_builds), build))
       default_device = ensure_device(default_device)
-      test_build(args.chromium_src, build, default_device)
+      test_build(args.chromium_src, build, default_device, args.page_filter)
       last_tested_datetime = build.datetime
       print('[%s] ' % time.strftime(datetime_format), end='')
     sleep_seconds = int(next_poll_time - time.time())

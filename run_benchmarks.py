@@ -20,7 +20,13 @@ import argparse
 import os
 import subprocess
 
-from common_args import parse_argsets, chromium_src_arg, build_args, device_arg
+from common_args import (
+  parse_argsets,
+  build_args,
+  chromium_src_arg,
+  device_arg,
+  page_filter_arg,
+)
 from build import Build
 
 from constants import (
@@ -30,7 +36,7 @@ from constants import (
 )
 
 
-def run_benchmarks(chromium_src, build, device):
+def run_benchmarks(chromium_src, build, device, page_filter):
   if not os.path.exists(results_directory):
     os.mkdir(results_directory)
   username = subprocess.check_output(['whoami']).strip()
@@ -44,14 +50,16 @@ def run_benchmarks(chromium_src, build, device):
   ]
   if device:
     command.append('--device=' + device)
+  if page_filter:
+    command.append('--page-filter=' + page_filter)
   print('Executing:', ' '.join(command))
   print('Using working directory:', chromium_src)
   subprocess.check_call(command, cwd=chromium_src)
   return results_file
 
 def main():
-  args = parse_argsets([chromium_src_arg, build_args, device_arg])
-  results_file = run_benchmarks(args.chromium_src, Build(args.datetime, args.commit), args.device)
+  args = parse_argsets([chromium_src_arg, build_args, device_arg, page_filter_arg])
+  results_file = run_benchmarks(args.chromium_src, Build(args.datetime, args.commit), args.device, args.page_filter)
   print('Results file:', results_file)
 
 if __name__ == '__main__':
