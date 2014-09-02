@@ -16,12 +16,13 @@
 
 from __future__ import print_function
 
-from list_builds import list_builds
+from list_builds import list_every_build
 from get_build import ensure_build_file
 from deploy_build import deploy_build
 
 def main():
-  build = list_builds('every')[-1]
+  args = parse_argsets([chromium_src_arg], parser)
+  build = list_every_build(args.chromium_src)[-1]
   build_file = ensure_build_file(build)
   deploy_build(build_file)
   print('Deployed build:', build)
