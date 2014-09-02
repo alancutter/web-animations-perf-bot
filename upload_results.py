@@ -46,11 +46,11 @@ def get_metrics(test_results):
     metrics = test_results['_BlinkPerfMeasurement']['metrics']
     metrics = {test: metrics[test] for test in metrics if test_filter(test)}
     metrics = {(test[:test.index('.')] if '.' in test else test): metrics[test] for test in metrics}
-  elif 'Smoothness' in test_results:
-    metrics = test_results['Smoothness']['metrics']
+  elif 'smoothness.perf_week.perf_week' in test_results:
+    metrics = test_results['smoothness.perf_week.perf_week']['metrics']
     metrics = {test: metrics[test] for test in metrics if test_filter(test, wanted_smoothness_tests)}
   else:
-    raise 'Unknown measurement: ' + str(test_results.keys())
+    raise Exception('Unknown measurement: ' + str(test_results.keys()))
   return metrics
 
 def upload_results(path):
