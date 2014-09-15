@@ -53,6 +53,19 @@ def get_metrics(test_results):
     raise Exception('Unknown measurement: ' + str(test_results.keys()))
   return metrics
 
+def retry_loop(f):
+  wait = 1
+  while True:
+    try:
+      f()
+      return
+    except Exception:
+      print(sys.exc_info()[1])
+      print('Retrying in %s second(s)...' % wait)
+      time.sleep(wait)
+      wait *= 2
+
+
 def upload_results(path):
   print('Uploading results file: %s' % path)
   commit_date, commit, device, username = re.match(results_filename_re, os.path.basename(path)).groups()
@@ -73,7 +86,7 @@ def upload_results(path):
     })
     print(post_data)
     # FIXME: Upload all the test results in one batch.
-    urllib2.urlopen(spreadsheet_url, post_data)
+    retry_loop(lambda: urllib2.urlopen(spreadsheet_url, post_data))
 
 def main():
   parser = argparse.ArgumentParser()
