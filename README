@@ -1,0 +1,2 @@
+Typical command to run the perf bot:
+python run_bot.py --chromium-src=../chromium/src --from-datetime=2014-10-23 --step=daily
