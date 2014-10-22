@@ -22,7 +22,7 @@ date_re = r'[\d-]{10}'
 datetime_re = date_re + r'T[\d:]{5}'
 commit_re = r'[\da-f]+'
 
-build_url = 'http://commondatastorage.googleapis.com/chromium-browser-continuous/'
+build_url = 'http://commondatastorage.googleapis.com/chromium-browser-snapshots/'
 index_url = build_url + '?prefix=Android/'
 hosted_build_url_template = build_url + 'Android/%s/chrome-android.zip' # % commit
 hosted_build_key_re = 'Android/(%s)/chrome-android\.zip' % commit_re
@@ -30,7 +30,6 @@ xmlns = 'http://doc.s3.amazonaws.com/2006-03-01'
 list_cache_directory = 'list_cache'
 commit_datetimes_path = os.path.join(list_cache_directory, 'commit_datetimes')
 commit_position_tag = 'Cr-Commit-Position: refs/heads/master@{#%s}'
-
 
 archive_directory = 'zips'
 archived_build_file_template = archive_directory + '/Android-%s-%s.zip' # % (datetime, commit)
