@@ -30,22 +30,27 @@ from common_args import (
 from build import Build
 
 from constants import (
+  all_results_directory,
+  results_directory_template,
+  results_filename,
   run_benchmark_script,
-  results_directory,
-  results_file_template,
 )
 
 
+def ensure_directory(directory):
+  if not os.path.exists(directory):
+    os.mkdir(directory)
+
 def run_benchmarks(chromium_src, build, device, page_filter):
-  if not os.path.exists(results_directory):
-    os.mkdir(results_directory)
   username = subprocess.check_output(['whoami']).strip()
-  results_file = results_file_template % (build.datetime, build.commit, device, username)
+  results_directory = results_directory_template % (build.datetime, build.commit, device, username)
+  ensure_directory(all_results_directory)
+  ensure_directory(results_directory)
   command = [
     'python',
     run_benchmark_script,
     '--browser=android-content-shell',
-    '--output=' + os.path.abspath(results_file),
+    '--output-dir=' + os.path.abspath(results_directory),
     '--reset-results'
   ]
   if device:
@@ -55,7 +60,7 @@ def run_benchmarks(chromium_src, build, device, page_filter):
   print('Executing:', ' '.join(command))
   print('Using working directory:', chromium_src)
   subprocess.check_call(command, cwd=chromium_src)
-  return results_file
+  return os.path.join(results_directory, results_filename)
 
 def main():
   args = parse_argsets([chromium_src_arg, build_args, device_arg, page_filter_arg])

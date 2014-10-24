@@ -26,7 +26,7 @@ import urllib
 import urllib2
 
 from constants import (
-  results_filename_re,
+  results_directory_re,
   spreadsheet_url,
   unwanted_test,
   upload_datetime_format,
@@ -46,8 +46,8 @@ def get_metrics(test_results):
     metrics = test_results['_BlinkPerfMeasurement']['metrics']
     metrics = {test: metrics[test] for test in metrics if test_filter(test)}
     metrics = {(test[:test.index('.')] if '.' in test else test): metrics[test] for test in metrics}
-  elif 'smoothness.perf_week.perf_week' in test_results:
-    metrics = test_results['smoothness.perf_week.perf_week']['metrics']
+  elif 'smoothness.perf_week' in test_results:
+    metrics = test_results['smoothness.perf_week']['metrics']
     metrics = {test: metrics[test] for test in metrics if test_filter(test, wanted_smoothness_tests)}
   else:
     raise Exception('Unknown measurement: ' + str(test_results.keys()))
@@ -68,7 +68,7 @@ def retry_loop(f):
 
 def upload_results(path):
   print('Uploading results file: %s' % path)
-  commit_date, commit, device, username = re.match(results_filename_re, os.path.basename(path)).groups()
+  commit_date, commit, device, username = re.match(results_directory_re, os.path.basename(os.path.dirname(path))).groups()
   run_timestamp = time.strftime(upload_datetime_format, time.gmtime(os.stat(path).st_mtime))
   results_blob = json.loads(re.search('<script id="results-json" type="application/json">(.*?)</script>', open(path).read()).group(1))
   metrics = get_metrics(results_blob[0]['tests'])
@@ -90,7 +90,7 @@ def upload_results(path):
 
 def main():
   parser = argparse.ArgumentParser()
-  parser.add_argument('--results-file', action='append', help='Path to results file with the filename format: results_<commit_datetime>_<commit>_<device>_<username>.html')
+  parser.add_argument('--results-file', action='append', help='Path to results file with the file path format: <commit_datetime>_<commit>_<device>_<username>/results.html')
   args = parser.parse_args()
   if not args.results_file:
     print('--results-file missing.')

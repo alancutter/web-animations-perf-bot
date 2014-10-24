@@ -38,11 +38,12 @@ extraction_directory = 'apks'
 extracted_build_file_template = extraction_directory + '/ContentShell_%s_%s.apk' # % (datetime, commit)
 
 run_benchmark_script = 'third_party/WebKit/PerformanceTests/Animation/PerfWeek/run-big-benchmarks.py'
-results_directory = 'results'
-results_file_template = results_directory + '/results_%s_%s_%s_%s.html' # % (datetime, commit, device, username)
+all_results_directory = 'results'
+results_directory_template = os.path.join(all_results_directory, '%s_%s_%s_%s') # % (datetime, commit, device, username)
+results_filename = 'results.html'
 
 spreadsheet_url = 'https://script.google.com/macros/s/AKfycbz16KoKbDyWVa9tFOTW09MYv7lSy8h3icmHKanO7FEmPgnz4TU/exec'
 unwanted_test = 'telemetry_page_measurement_results.num_'
 wanted_smoothness_tests = ['avg_surface_fps.', 'mean_frame_time.', 'jank_count.', 'max_frame_delay.']
-results_filename_re = r'results_([\d-]{10})T\d\d:\d\d_([\da-f]+)_([\d\w]+)_(\w+)\.html'
+results_directory_re = r'([\d-]{10})T\d\d:\d\d_([\da-f]+)_([\d\w]+)_(\w+)'
 upload_datetime_format = '%Y-%m-%d %H:%M:%S'
